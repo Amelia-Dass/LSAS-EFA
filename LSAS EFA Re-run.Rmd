@@ -48,7 +48,11 @@ efa_out_all_2
 ```
 
 ```{r}
+<<<<<<< HEAD
 # Dataset excluding all individuals WITH SpLD
+=======
+# Dataset excluding all individuals WITHOUT SpLD
+>>>>>>> 163dafc31510cd136975873346a996046900507f
 smarvus_dat_nospld <- smarvus_dat_b %>% dplyr::filter(spld == "I do not have an SpLD") %>% tidyr::drop_na(spld)
 # 7250 participants
 nrow(smarvus_dat_nospld)
@@ -61,7 +65,11 @@ efa_out_nospld_2
 ```
 
 ```{r}
+<<<<<<< HEAD
 # Dataset excluding all individuals WITHOUT SpLD
+=======
+# Dataset excluding all individuals WITH SpLD
+>>>>>>> 163dafc31510cd136975873346a996046900507f
 smarvus_dat_spld <- smarvus_dat_b %>% dplyr::filter(spld != "I do not have an SpLD") %>% tidyr::drop_na(spld)
 # 671 participants
 nrow(smarvus_dat_spld)
