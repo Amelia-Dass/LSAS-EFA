@@ -1,0 +1,88 @@
+---
+title: "LSAS - Research Process"
+author: "AD"
+date: '2023-11-10'
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+```{r}
+library(magrittr)
+smarvus_dat <- here::here("data/smarvus_complete_290723.csv") %>%  
+  readr::read_csv()
+```
+
+```{r}
+# Filter attention amnesty + attention checks
+smarvus_dat_a <- smarvus_dat %>%
+    dplyr::filter(attention_amnesty == "Yes",
+           Q7.1_24 == "1",
+           Q8.1_21 == "5",
+           Q11.1_9 == "3",
+           Q9.1_22 == "1",
+           Q13.1_17 == "2",
+           Q15.1_9 == "4")
+
+# 4210 excluded from attention amnesty + failed attention checks
+nrow(smarvus_dat) - nrow(smarvus_dat_a)
+
+# Filter N/A response within LSAS
+smarvus_dat_all <- smarvus_dat_a %>% tidyr::drop_na(Q12.1_1:Q12.1_24)
+
+#22 removed for N/A response within LSAS
+nrow(smarvus_dat_a) - nrow(smarvus_dat_all)
+```
+
+
+```{r}
+# Dataset with no SpLD-based exclusions 
+efa_dat_all <- dplyr::select(smarvus_dat_all, c(Q12.1_1:Q12.1_24))
+
+efa_out_all_1 <- psych::fa.parallel(efa_dat_all, fa = "fa", fm = "ml", cor = "poly", SMC = T, n.iter = 100)
+efa_out_all_2 <- psych::vss(efa_dat_all, fm = "ml", cor = "poly")
+efa_out_all_1
+efa_out_all_2
+```
+
+```{r}
+# Dataset excluding all individuals WITH SpLD
+smarvus_dat_nospld <- smarvus_dat_b %>% dplyr::filter(spld == "I do not have an SpLD") %>% tidyr::drop_na(spld)
+# 7250 participants
+nrow(smarvus_dat_nospld)
+
+efa_dat_nospld <- dplyr::select(smarvus_dat_nospld, c(Q12.1_1:Q12.1_24))
+efa_out_nospld_1 <- psych::fa.parallel(efa_dat_nospld, fa = "fa", fm = "ml", cor = "poly", SMC = T, n.iter = 100)
+efa_out_nospld_2 <- psych::vss(efa_dat_nospld, fm = "ml", cor = "poly")
+efa_out_nospld_1
+efa_out_nospld_2
+```
+
+```{r}
+# Dataset excluding all individuals WITHOUT SpLD
+smarvus_dat_spld <- smarvus_dat_b %>% dplyr::filter(spld != "I do not have an SpLD") %>% tidyr::drop_na(spld)
+# 671 participants
+nrow(smarvus_dat_spld)
+
+efa_dat_spld <- dplyr::select(smarvus_dat_spld, c(Q12.1_1:Q12.1_24))
+efa_out_spld_1 <- psych::fa.parallel(efa_dat_spld, fa = "fa", fm = "ml", cor = "poly", SMC = T, n.iter = 100)
+efa_out_spld_2 <- psych::vss(efa_dat_spld, fm = "ml", cor = "poly")
+efa_out_spld_1
+efa_out_spld_2
+```
+
+```{r}
+# Dataset excluding all individuals WITHOUT ADHD/ADD
+smarvus_dat_adhd <- smarvus_dat_b %>% dplyr::filter(spld == "ADHD/ADD")
+# 270 participants
+nrow(smarvus_dat_adhd)
+
+efa_dat_adhd <- dplyr::select(smarvus_dat_adhd, c(Q12.1_1:Q12.1_24))
+efa_out_adhd_1 <- psych::fa.parallel(efa_dat_adhd, fa = "fa", fm = "ml", cor = "poly", SMC = T, n.iter = 100)
+efa_out_adhd_2 <- psych::vss(efa_dat_adhd, fm = "ml", cor = "poly")
+efa_out_adhd_1
+efa_out_adhd_2
+```
+
