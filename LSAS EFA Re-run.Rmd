@@ -10,7 +10,7 @@ knitr::opts_chunk$set(echo = TRUE)
 ```
 
 ```{r}
-library(magrittr)
+library(magrittr) 
 smarvus_dat <- here::here("data/smarvus_complete_290723.csv") %>%  
   readr::read_csv()
 ```
